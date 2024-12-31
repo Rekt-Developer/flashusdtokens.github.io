@@ -24,13 +24,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
-    <link href="styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
     <div id="particles-js"></div>
+    <div id="snowfall"></div>
     <header>
         <nav class="navbar">
             <a href="#" class="logo">
@@ -41,7 +42,7 @@
                 <a href="#features">Features</a>
                 <a href="#stats">Stats</a>
                 <a href="#roadmap">Roadmap</a>
-                <a href="https://birdeye.so/token/3DtY5phwCAt1Y7GQ453f543SmvQvdMR3Mej4MC5Upump?chain=solana" target="_blank" rel="noopener noreferrer">Chart</a>
+                <a href="#chart">Chart</a>
                 <a href="https://t.me/FlashUSDTokens" target="_blank" rel="noopener noreferrer" class="cta-button">Join Now</a>
             </div>
             <button class="mobile-menu-toggle" aria-label="Toggle menu">
@@ -56,11 +57,17 @@
         <section class="hero">
             <div class="hero-content" data-aos="fade-up">
                 <h1 class="glitch" data-text="Flash USDT (FUSDT)">Flash USDT (FUSDT)</h1>
-                <p>Experience the next evolution of DeFi with zero fees and instant transactions on Solana. Join the fastest-growing meme token community today.</p>
-                <a href="https://t.me/FlashUSDTokens" class="cta-button" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-telegram"></i>
-                    Join Community
-                </a>
+                <p class="hero-description">Experience the next evolution of DeFi with zero fees and instant transactions on Solana. Join the fastest-growing meme token community today.</p>
+                <div class="cta-group">
+                    <a href="https://t.me/FlashUSDTokens" class="cta-button primary" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-telegram"></i>
+                        Join Community
+                    </a>
+                    <a href="#chart" class="cta-button secondary">
+                        <i class="fas fa-chart-line"></i>
+                        View Chart
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -103,23 +110,10 @@
             </div>
         </section>
 
-        <section id="chart" class="section">
-            <h2 class="section-title" data-aos="fade-up">Live FUSDT Chart</h2>
-            <div class="chart-container" data-aos="fade-up">
-                <iframe 
-                    width="100%" 
-                    height="600" 
-                    src="https://birdeye.so/tv-widget/3DtY5phwCAt1Y7GQ453f543SmvQvdMR3Mej4MC5Upump?chain=solana&viewMode=pair&chartInterval=30&chartType=Candle&chartTimezone=Asia%2FDhaka&chartLeftToolbar=show&theme=dark&cssCustomProperties=--tv-color-platform-background%3A%23b9fff8&cssCustomProperties=--tv-color-pane-background%3A%2300c572&chartOverrides=paneProperties.backgroundType%3Asolid" 
-                    frameborder="0" 
-                    allowfullscreen>
-                </iframe>
-            </div>
-        </section>
-
         <section id="roadmap" class="section">
             <h2 class="section-title" data-aos="fade-up">Roadmap</h2>
-            <div class="timeline" data-aos="fade-up">
-                <div class="timeline-item">
+            <div class="timeline">
+                <div class="timeline-item" data-aos="fade-right">
                     <div class="timeline-content">
                         <h3>Q1 2024</h3>
                         <ul>
@@ -129,7 +123,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="timeline-item">
+                <div class="timeline-item" data-aos="fade-left">
                     <div class="timeline-content">
                         <h3>Q2 2024</h3>
                         <ul>
@@ -139,7 +133,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="timeline-item">
+                <div class="timeline-item" data-aos="fade-right">
                     <div class="timeline-content">
                         <h3>Q3 2024</h3>
                         <ul>
@@ -149,7 +143,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="timeline-item">
+                <div class="timeline-item" data-aos="fade-left">
                     <div class="timeline-content">
                         <h3>Q4 2024</h3>
                         <ul>
@@ -159,6 +153,20 @@
                         </ul>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section id="chart" class="section">
+            <h2 class="section-title" data-aos="fade-up">Live FUSDT Chart</h2>
+            <div class="chart-container" data-aos="fade-up">
+                <iframe 
+                    width="100%" 
+                    height="600" 
+                    src="https://birdeye.so/tv-widget/3DtY5phwCAt1Y7GQ453f543SmvQvdMR3Mej4MC5Upump?chain=solana&viewMode=pair&chartInterval=30&chartType=Candle&chartTimezone=Asia%2FDhaka&chartLeftToolbar=show&theme=dark&cssCustomProperties=--tv-color-platform-background%3A%23b9fff8&cssCustomProperties=--tv-color-pane-background%3A%2300c572&chartOverrides=paneProperties.backgroundType%3Asolid" 
+                    frameborder="0" 
+                    allowfullscreen
+                    title="FUSDT Live Chart">
+                </iframe>
             </div>
         </section>
     </main>
@@ -174,6 +182,13 @@
             <p>&copy; 2024 Flash USDT (FUSDT). All rights reserved.</p>
         </div>
     </footer>
+
+    <div id="music-controls" class="music-controls">
+        <button id="toggle-music" aria-label="Toggle music">
+            <i class="fas fa-volume-mute"></i>
+        </button>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" aria-label="Adjust volume">
+    </div>
 
     <audio id="background-music" loop>
         <source src="https://www.free-stock-music.com/music/alex-productions/mp3/alex-productions-christmas-mood.mp3" type="audio/mpeg">
