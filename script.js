@@ -41,80 +41,155 @@ document.addEventListener('DOMContentLoaded', () => {
     AOS.init({
         duration: 1000,
         once: true,
+        mirror: true,
+        offset: 100
     });
 
     // Counter animation
     const counters = document.querySelectorAll('.counter');
     const speed = 200;
 
-    counters.forEach(counter => {
-        const updateCount = () => {
-            const target = +counter.getAttribute('data-target');
-            const count = +counter.innerText;
-            const inc = target / speed;
+    const animateCounter = (counter) => {
+        const target = +counter.getAttribute('data-target');
+        let count = 0;
+        const inc = target / speed;
 
+        const updateCount = () => {
+            count += inc;
             if (count < target) {
-                counter.innerText = Math.ceil(count + inc);
-                setTimeout(updateCount, 1);
+                counter.innerText = Math.ceil(count);
+                requestAnimationFrame(updateCount);
             } else {
                 counter.innerText = target;
             }
         };
 
         updateCount();
+    };
+
+    const handleIntersection = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    };
+
+    const counterObserver = new IntersectionObserver(handleIntersection, {
+        threshold: 0.5
     });
+
+    counters.forEach(counter => counterObserver.observe(counter));
+
 
     // Background music
     const backgroundMusic = document.getElementById('background-music');
-    let isPlaying = false;
-
-    document.addEventListener('click', () => {
-        if (!isPlaying) {
-            backgroundMusic.play();
-            isPlaying = true;
-        }
-    }, { once: true });
-
-    // Volume control
-    const volumeControl = document.createElement('div');
-    volumeControl.innerHTML = `
-        <button id="toggle-music" aria-label="Toggle music">🔇</button>
-        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
-    `;
-    document.body.appendChild(volumeControl);
-
     const toggleMusicBtn = document.getElementById('toggle-music');
     const volumeSlider = document.getElementById('volume-slider');
+    let isPlaying = false;
 
-    toggleMusicBtn.addEventListener('click', () => {
-        if (backgroundMusic.paused) {
-            backgroundMusic.play();
-            toggleMusicBtn.textContent = '🔊';
-        } else {
+    const toggleMusic = () => {
+        if (isPlaying) {
             backgroundMusic.pause();
-            toggleMusicBtn.textContent = '🔇';
+            toggleMusicBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        } else {
+            backgroundMusic.play();
+            toggleMusicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
         }
-    });
+        isPlaying = !isPlaying;
+    };
+
+    toggleMusicBtn.addEventListener('click', toggleMusic);
 
     volumeSlider.addEventListener('input', (e) => {
         backgroundMusic.volume = e.target.value;
     });
 
+    // Autoplay music when user interacts with the page
+    const autoplayMusic = () => {
+        if (!isPlaying) {
+            toggleMusic();
+        }
+        document.removeEventListener('click', autoplayMusic);
+    };
+
+    document.addEventListener('click', autoplayMusic, { once: true });
+
     // Snowfall effect
-    function createSnowflake() {
+    const createSnowflake = () => {
         const snowflake = document.createElement('div');
         snowflake.classList.add('snowflake');
-        snowflake.style.left = Math.random() * window.innerWidth + 'px';
-        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+        snowflake.style.left = `${Math.random() * window.innerWidth}px`;
+        snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
         snowflake.style.opacity = Math.random();
         snowflake.innerHTML = '❄';
-        document.body.appendChild(snowflake);
+        
+        const snowfallContainer = document.getElementById('snowfall');
+        snowfallContainer.appendChild(snowflake);
 
         setTimeout(() => {
             snowflake.remove();
         }, 5000);
-    }
+    };
 
     setInterval(createSnowflake, 200);
+
+    // Glitch effect on scroll
+    const glitchElements = document.querySelectorAll('.glitch');
+    let lastScrollTop = 0;
+
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (Math.abs(scrollTop - lastScrollTop) > 50) {
+            glitchElements.forEach(element => {
+                element.style.animation = 'none';
+                void element.offsetWidth; // Trigger reflow
+                element.style.animation = null;
+            });
+            lastScrollTop = scrollTop;
+        }
+    });
+
+    // Lazy loading for images
+    const lazyImages = document.querySelectorAll('img[data-src]');
+    const lazyImageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                lazyImageObserver.unobserve(img);
+            }
+        });
+    });
+
+    lazyImages.forEach(img => lazyImageObserver.observe(img));
+
+    // Form submission handling (if applicable)
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Add form submission logic here
+            console.log('Form submitted');
+        });
+    }
+
+    // Responsive navigation
+    const handleResponsiveNav = () => {
+        if (window.innerWidth <= 768) {
+            navLinks.classList.remove('active');
+            mobileMenuToggle.classList.remove('active');
+        }
+    };
+
+    window.addEventListener('resize', handleResponsiveNav);
+
+    // Initialize tooltips (if using a tooltip library)
+    // Example: tippy('[data-tippy-content]');
+
+    // Add any additional interactive features or animations here
 });
 
