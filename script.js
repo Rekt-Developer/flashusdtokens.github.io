@@ -18,6 +18,88 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Particle.js initialization
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: "#ffffff" },
+            shape: { type: "circle" },
+            opacity: { value: 0.5, random: false },
+            size: { value: 3, random: true },
+            line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+            move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
+        },
+        interactivity: {
+            detect_on: "canvas",
+            events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
+            modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+        },
+        retina_detect: true
+    });
+
+    // AOS initialization
+    AOS.init({
+        duration: 1000,
+        once: true,
+    });
+
+    // Counter animation
+    const counters = document.querySelectorAll('.counter');
+    const speed = 200;
+
+    counters.forEach(counter => {
+        const updateCount = () => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+            const inc = target / speed;
+
+            if (count < target) {
+                counter.innerText = Math.ceil(count + inc);
+                setTimeout(updateCount, 1);
+            } else {
+                counter.innerText = target;
+            }
+        };
+
+        updateCount();
+    });
+
+    // Background music
+    const backgroundMusic = document.getElementById('background-music');
+    let isPlaying = false;
+
+    document.addEventListener('click', () => {
+        if (!isPlaying) {
+            backgroundMusic.play();
+            isPlaying = true;
+        }
+    }, { once: true });
+
+    // Volume control
+    const volumeControl = document.createElement('div');
+    volumeControl.innerHTML = `
+        <button id="toggle-music" aria-label="Toggle music">🔇</button>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+    `;
+    document.body.appendChild(volumeControl);
+
+    const toggleMusicBtn = document.getElementById('toggle-music');
+    const volumeSlider = document.getElementById('volume-slider');
+
+    toggleMusicBtn.addEventListener('click', () => {
+        if (backgroundMusic.paused) {
+            backgroundMusic.play();
+            toggleMusicBtn.textContent = '🔊';
+        } else {
+            backgroundMusic.pause();
+            toggleMusicBtn.textContent = '🔇';
+        }
+    });
+
+    volumeSlider.addEventListener('input', (e) => {
+        backgroundMusic.volume = e.target.value;
+    });
+
     // Snowfall effect
     function createSnowflake() {
         const snowflake = document.createElement('div');
@@ -25,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         snowflake.style.left = Math.random() * window.innerWidth + 'px';
         snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
         snowflake.style.opacity = Math.random();
-        snowflake.innerText = '❄';
+        snowflake.innerHTML = '❄';
         document.body.appendChild(snowflake);
 
         setTimeout(() => {
@@ -34,144 +116,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setInterval(createSnowflake, 200);
-
-    // Parallax effect for hero section
-    window.addEventListener('scroll', () => {
-        const scrollPosition = window.pageYOffset;
-        document.querySelector('.hero').style.backgroundPositionY = scrollPosition * 0.7 + 'px';
-    });
-
-    // Animate stats on scroll
-    const stats = document.querySelectorAll('#stats .card h3');
-    const animateStats = () => {
-        stats.forEach(stat => {
-            const statValue = parseFloat(stat.getAttribute('data-target'));
-            const currentValue = parseFloat(stat.innerText);
-            const increment = statValue / 100;
-            if (currentValue < statValue) {
-                stat.innerText = Math.ceil(currentValue + increment);
-                setTimeout(animateStats, 20);
-            } else {
-                stat.innerText = statValue;
-            }
-        });
-    };
-
-    const statsSection = document.querySelector('#stats');
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.5
-    };
-
-    const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateStats();
-                statsObserver.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    statsObserver.observe(statsSection);
-
-    // Typing effect for hero title
-    const heroTitle = document.querySelector('.hero h1');
-    const titleText = heroTitle.innerText;
-    heroTitle.innerText = '';
-    let i = 0;
-
-    function typeWriter() {
-        if (i < titleText.length) {
-            heroTitle.innerHTML += titleText.charAt(i);
-            i++;
-            setTimeout(typeWriter, 100);
-        }
-    }
-
-    typeWriter();
-
-    // Particle background effect
-    const canvas = document.createElement('canvas');
-    document.body.appendChild(canvas);
-    canvas.style.position = 'fixed';
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.pointerEvents = 'none';
-    canvas.style.zIndex = '-1';
-
-    const ctx = canvas.getContext('2d');
-    let particlesArray;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    class Particle {
-        constructor(x, y) {
-            this.x = x;
-            this.y = y;
-            this.size = Math.random() * 5 + 1;
-            this.speedX = Math.random() * 3 - 1.5;
-            this.speedY = Math.random() * 3 - 1.5;
-        }
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-            if (this.size > 0.2) this.size -= 0.1;
-        }
-        draw() {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    function init() {
-        particlesArray = [];
-        for (let i = 0; i < 100; i++) {
-            let x = Math.random() * canvas.width;
-            let y = Math.random() * canvas.height;
-            particlesArray.push(new Particle(x, y));
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
-            if (particlesArray[i].size <= 0.2) {
-                particlesArray.splice(i, 1);
-                i--;
-                particlesArray.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
-            }
-        }
-        requestAnimationFrame(animate);
-    }
-
-    init();
-    animate();
-
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        init();
-    });
-
-    // Add hover effect to cards
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'scale(1.05)';
-            card.style.boxShadow = '0 10px 20px rgba(0,180,216,0.2)';
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'scale(1)';
-            card.style.boxShadow = 'none';
-        });
-    });
 });
 
